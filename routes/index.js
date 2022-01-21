@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var request = require('sync-request')
 
 //Fake
 var cityList = [
@@ -20,22 +21,27 @@ router.get('/weather', function(req,res,next){
 
 /*---- AddCity -----*/
 router.post('/add-city', function(req,res,next){
+  
+  var data = request("GET", `http://api.openweathermap.org/data/2.5/weather?q=${req.body.newcity}&lang=fr&appid=578e4c04f9050d4e61bd79ac5f3c583e`)
+  var dataAPI = JSON.parse(data.body)
+
+  console.log(dataAPI);
 
   var alreadyExist = false;
 
   for(var i=0; i<cityList.length;i++){
-    if(req.body.newcity == cityList[i].name){
+    if(req.body.newcity.toLowerCase() == cityList[i].name.toLowerCase()){
       alreadyExist= true;
     }
   }
 
   if(alreadyExist == false){
     cityList.push({
-      name:req.body.newcity,
-      desc: "couvert",
-      img: "/images/picto-1.png",
-      temp_max: 1,
-      temp_min: -2
+      name: req.body.newcity,
+      desc: dataAPI.weather[0].description,
+      img:  "http://openweathermap.org/img/wn/"+dataAPI.weather[0].icon+".png",
+      temp_max: dataAPI.main.temp_max,
+      temp_min: dataAPI.main.temp_min,
     })
   }
 
