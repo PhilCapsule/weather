@@ -2,11 +2,13 @@ var express = require('express');
 var router = express.Router();
 var request = require('sync-request')
 
+require('./bdd')
+
 //Fake
 var cityList = [
   {name:"Aberdeen", desc:"Couvert", img:"/images/picto-1.png", temp_min:-2, temp_max:17},
   {name:"AberdeenShire", desc:"Couvert", img:"/images/picto-1.png", temp_min:0, temp_max:15},
-  {name:"Aberdeen", desc:"Couvert", img:"/images/picto-1.png", temp_min:3, temp_max:13},
+  
 
 ]
 
@@ -22,7 +24,7 @@ router.get('/weather', function(req,res,next){
 /*---- AddCity -----*/
 router.post('/add-city', function(req,res,next){
   
-  var data = request("GET", `http://api.openweathermap.org/data/2.5/weather?q=${req.body.newcity}&lang=fr&appid=578e4c04f9050d4e61bd79ac5f3c583e`)
+  var data = request("GET", `http://api.openweathermap.org/data/2.5/weather?q=${req.body.newcity}&units=metric&lang=fr&appid=578e4c04f9050d4e61bd79ac5f3c583e`)
   var dataAPI = JSON.parse(data.body)
 
   console.log(dataAPI);
