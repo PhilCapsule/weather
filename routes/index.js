@@ -35,7 +35,8 @@ router.post('/add-city', function(req,res,next){
     }
   }
 
-  if(alreadyExist == false){
+  // &&dataAPI.name invalid false city
+  if(alreadyExist == false && dataAPI.name){
     cityList.push({
       name: req.body.newcity,
       desc: dataAPI.weather[0].description,
