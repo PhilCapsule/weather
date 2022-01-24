@@ -1,14 +1,17 @@
 var express = require('express');
 var router = express.Router();
 var request = require('sync-request');
-const { find } = require('./bdd');
 
-var cityModel = require('./bdd')
+var cityModel = require('../models/cities');
+
+var userModel = require('../models/users');
+
+
 
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+  res.render('login');
 });
 
 router.get('/weather', async function(req,res,next){
@@ -79,6 +82,18 @@ router.get('/update-cities', async function(req,res,next){
   var cityList = await cityModel.find();
   res.render('weather',{cityList})
 
+})
+
+/*----- In# of sign-up --------*/
+router.post('/sign-up', async function(req,res,next){
+
+  var nemUser = new userModel({
+    username: req.body.usernameFromFront,
+    email: req.body.emailFromFront,
+    password: req.body.passwordFromFront,
+  })
+  await newUser.save();
+  res.redirect('/weather')
 })
 
 module.exports = router;
