@@ -3,7 +3,6 @@ var router = express.Router();
 var request = require('sync-request');
 
 var cityModel = require('../models/cities');
-
 var userModel = require('../models/users');
 
 
