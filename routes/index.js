@@ -1,4 +1,5 @@
 var express = require('express');
+const res = require('express/lib/response');
 var router = express.Router();
 var request = require('sync-request');
 
@@ -99,13 +100,37 @@ router.post('/sign-up', async function(req,res,next){
     name: newUserSave.username,
     id: newUserSave._id,
   }
-  console.log(req.session.user);
+  // console.log(req.session.user);
   res.redirect('/weather')
 })
 
-router.get('/sign-in', async function(req,res,next){
 
+/*----- Sign IN ------*/
+router.post('/sign-in', async function(req,res,next){
+  var searchUser = await userModel.findOne({
+    email: req.body.emailFromFront,
+    password: req.body.passwordFromFront,
+  })
+  if(searchUser != null){
+    req.session.user = {
+      name: searchUser.username,
+      id: searchUser._id,
+    }
+    res.redirect('/weather')
+  } else {
+    res.render('login')
+  }
+  // console.log(searchUser);
   res.redirect('/weather')
 })
 
+/*----- Log_Out ----*/ 
+router.get('/logout'), function(req,res,next){
+
+  req.session.user = null;
+
+  res.redirect('/')
+}
 module.exports = router;
+
+// Part 4
