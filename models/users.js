@@ -1,4 +1,4 @@
-var mongoose = require('./connection')
+var mongoose = require('mongoose')
 
 var userSchema = mongoose.Schema({
     username: String,

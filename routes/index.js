@@ -8,7 +8,7 @@ var userModel = require('../models/users');
 
 
 
-/* GET home page. */
+/* GET home page.   */
 router.get('/', function(req, res, next) {
   res.render('login');
 });
@@ -18,6 +18,8 @@ router.get('/weather', async function(req,res,next){
 
   res.render('weather', {cityList})
 })
+
+
 
 /*---- AddCity -----*/
 router.post('/add-city',async function(req,res,next){
@@ -86,12 +88,23 @@ router.get('/update-cities', async function(req,res,next){
 /*----- In# of sign-up --------*/
 router.post('/sign-up', async function(req,res,next){
 
-  var nemUser = new userModel({
+  var newUser = new userModel({
     username: req.body.usernameFromFront,
     email: req.body.emailFromFront,
     password: req.body.passwordFromFront,
   })
-  await newUser.save();
+  var newUserSave = await newUser.save();
+
+  req.session.user = {
+    name: newUserSave.username,
+    id: newUserSave._id,
+  }
+  console.log(req.session.user);
+  res.redirect('/weather')
+})
+
+router.get('/sign-in', async function(req,res,next){
+
   res.redirect('/weather')
 })
 
